@@ -9,7 +9,7 @@ export class AuthService {
     constructor() {
         this.client
             .setEndpoint(conf.appwriteUrl)
-            .setProject(conf.appwriteProject);
+            .setProject(conf.appwriteProjectId);
         this.account = new Account(this.client);
     }
 
@@ -25,21 +25,24 @@ export class AuthService {
             }
 
         } catch (error) {
+            console.log(error.message);
+            
             throw error;
         }
     }
     async login({ email, password }) {
         try {
-            return await this.account.createEmailPasswordSession(email, password);
+            return await this.account.createEmailSession(email, password);
         } catch (error) {
-
+            throw error;
         }
     }
     async getCurrentUser(){
         try {
           return  await this.account.get()
         } catch (error) {
-            throw error
+            console.log("Appwrite serive :: getCurrentUser :: error", error);
+            
         }
         return null;
     }
